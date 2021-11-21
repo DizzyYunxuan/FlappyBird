@@ -5,7 +5,7 @@ from PIL import Image
 from scipy import ndimage
 import time
 
-img = r"D:\anaconda\flappy_ai\FlapPyBird\datasets\test_7.png"
+img = r"D:\anaconda\flappy_ai\FlapPyBird\datasets\multi_day_2.png"
 img_rgb = cv2.cvtColor(cv2.imread(img), cv2.COLOR_BGR2RGB)
 img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
 # img = np.mean(img, axis=2) / 255.
@@ -41,6 +41,7 @@ img_seg = cv2.filter2D(img_seg, -1, ll_sk)
 img_seg = img_seg > 0.999
 img_seg = img_seg.astype(np.float64)
 
+# shrink for edges
 img_seg = cv2.filter2D(img_seg, -1, s_k)
 img_seg = img_seg > 0.0
 img_seg = img_seg.astype(np.float64)
@@ -48,29 +49,46 @@ img_seg = img_seg.astype(np.float64)
 
 decision_map = np.zeros_like(img_edge)
 
+# get horizontal obs
 h_strip = img_seg[16, :]
-# h_strip_shuffle  = np.pad(h_strip, pad_width=((0, 1)), mode='constant')
 h_sePoints = h_strip[1:] - h_strip[:-1]
 h_start_Points = np.argwhere(h_sePoints > 0).flatten()
 h_end_Points = np.argwhere(h_sePoints < 0).flatten()
 
 if h_end_Points[0] < h_start_Points[0]:
     h_end_Points = h_end_Points[1:]
-h_ob_lr_tuple = np.array(list(zip(h_start_Points, h_end_Points)))
 
-num_ob = h_ob_lr_tuple.shape[0]
-
+# get vertical space
+num_ob = h_start_Points.shape[0]
+h_ob_lr_dict = {}
+v_sps_tb_dict = {}
 for i in range(num_ob):
-    s, e = h_ob_lr_tuple[i, :]
-    decision_map[:, s:e] = 1
+    h_ob_lr_dict[i] = [h_start_Points[i], h_end_Points[i]]
+    left, right = h_ob_lr_dict[i]
+    decision_map[:, left:right] = 1
+    v_strip = img_seg[:, np.int32((left + right) / 2)]
+    v_sePoints = v_strip[1:, :] - v_strip[:-1, :]
+    v_bot_Points = np.argwhere(v_sePoints < 0)
+    v_upper_Points = np.argwhere(v_sePoints > 0)
 
 
 
-v_strip = img_seg[:, np.int32((h_ob_lr_tuple[:, 0] + h_ob_lr_tuple[:, 1]) / 2)]
 # v_strip_shuffle = np.pad(v_strip, pad_width=((1, 0)), mode='constant')
 v_sePoints = v_strip[1:, :] - v_strip[:-1, :]
-v_upper_Points = np.argwhere(v_sePoints < 0)
-v_bot_Points = np.argwhere(v_sePoints > 0)
+v_bot_Points = np.argwhere(v_sePoints < 0)
+v_upper_Points = np.argwhere(v_sePoints > 0)
+
+
+
+
+l1_loss = []
+for i in range(num_ob):
+    current_upper_points = np.argwhere(v_upper_Points[:, 1] == i).flatten()
+    current_upper_points = v_upper_Points[current_upper_points]
+    for u, idx in current_upper_points:
+        bot_tube_patch = img[u:u+pattern_h, ]
+        l1_loss.appen()
+
 
 
 bird_strip = img_seg[:, 50:100]
