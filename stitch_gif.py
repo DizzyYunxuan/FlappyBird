@@ -3,12 +3,13 @@ import cv2
 import numpy as np
 import imageio
 
-imgs_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_3'
-decision_map_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_3_results'
-target_gif_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\gifs\res_cat.gif'
 
-img_list = sorted(os.listdir(imgs_path))
-decision_map_list = sorted(os.listdir(decision_map_path))
+imgs_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4'
+decision_map_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4_results'
+target_gif_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\gifs\res_cat_4.gif'
+
+img_list = sorted(os.listdir(imgs_path), key=lambda x:int(x.split('_')[1][:-4]))
+decision_map_list = sorted(os.listdir(decision_map_path), key=lambda x:int(x.split('_')[1][:-4]))
 
 frames = []
 for i in range(len(img_list)):

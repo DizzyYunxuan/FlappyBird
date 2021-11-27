@@ -14,9 +14,9 @@ time.sleep(0)
 
 test_img = []
 
-for i in range(20):
+for i in range(180):
     img = ImageGrab.grab(bbox=bbox)
-    time.sleep(0.1)
+    time.sleep(1/180)
     test_img.append(img)
 
 
@@ -24,4 +24,4 @@ for i in range(20):
 
 for i in range(len(test_img)):
     img = test_img[i]
-    img.save(r'./datasets\test_png_3\test_{}.png'.format(i))
+    img.save(r'./datasets\test_png_4\test_{}.png'.format(i))
