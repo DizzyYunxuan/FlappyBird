@@ -61,8 +61,14 @@ def get_decisionMap(img_gray):
     h_start_Points = np.argwhere(h_sePoints > 0).flatten()
     h_end_Points = np.argwhere(h_sePoints < 0).flatten()
 
-    if h_start_Points.shape[0] < 1 or h_end_Points.shape[0] < 1:
+    if h_start_Points.shape[0] < 1 and h_end_Points.shape[0] < 1:
         num_ob = 0
+    elif h_start_Points.shape[0] < 1:
+        num_ob = 1
+        h_start_Points = np.append(0, h_start_Points)
+    elif h_end_Points.shape[0] < 1:
+        num_ob = 1
+        h_end_Points = np.append(h_end_Points, w)
     else:
         if h_start_Points[0] > h_end_Points[0]:
             h_start_Points = np.append(0, h_start_Points)
@@ -107,13 +113,14 @@ def get_decisionMap(img_gray):
 
 
 if __name__ == '__main__':
+    import time
 
-
-    img_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4\test_48.png'
+    img_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4\test_28.png'
     img_gray = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    s = time.time()
     decision_map = get_decisionMap(img_gray)
-    plt.imshow(decision_map)
-    print()
+    e = time.time()
+    print("Time: {}".format(e-s))
 
 
 

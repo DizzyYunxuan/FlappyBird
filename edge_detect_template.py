@@ -100,8 +100,8 @@ from edge_detect_template_single_test import get_decisionMap
 
 
 if __name__ == '__main__':
-    test_sequence_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4'
-    res_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_4_results'
+    test_sequence_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_5'
+    res_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_5_results'
 
     if not os.path.exists(res_path):
         os.mkdir(res_path)
