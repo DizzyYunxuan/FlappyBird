@@ -105,7 +105,7 @@ def get_decisionMap(img_gray):
 
     # upper, bot, left, right
     x_bird = bird_loc[0, 0]
-    bird_bounding_box = np.array([x_bird, x_bird + 20, 50, 85])
+    bird_bounding_box = np.array([x_bird, x_bird + 20, 55, 85])
     decision_map[bird_bounding_box[0]:bird_bounding_box[1], bird_bounding_box[2]:bird_bounding_box[3]] = 1
 
     return decision_map
