@@ -9,7 +9,8 @@ import os
 
 
 
-def get_decisionMap(img_gray):
+def get_decisionMap(img):
+    img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     img = img_gray[34:434, 8:-8]
     [h, w] = img.shape
 
@@ -39,17 +40,6 @@ def get_decisionMap(img_gray):
     img_seg = img_seg > 0.999
     img_seg = img_seg.astype(np.float64)
 
-    # shrink for edges
-    # img_seg = cv2.filter2D(img_seg, -1, s_k)
-    # img_seg = img_seg > 0.0
-    # img_seg = img_seg.astype(np.float64)
-    # img_seg = cv2.filter2D(img_seg, -1, ls_k)
-    # img_seg = img_seg > 0.0
-    # img_seg = img_seg.astype(np.float64)
-    # img_seg = cv2.filter2D(img_seg, -1, ll_sk)
-    # img_seg = img_seg > 0.0
-    # img_seg = img_seg.astype(np.float64)
-
     # remove scores
     img_seg[45:90, 125:160] = 1
 
@@ -78,8 +68,8 @@ def get_decisionMap(img_gray):
         
 
     # get vertical space
-    # num_ob = h_start_Points.shape[0]
     h_ob_lr_dict = {}
+    v_space_ub_dict = {}
     for i in range(num_ob):
         h_ob_lr_dict[i] = [h_start_Points[i], h_end_Points[i]]
         left, right = h_ob_lr_dict[i]
@@ -90,6 +80,7 @@ def get_decisionMap(img_gray):
         v_upper_Points = np.argwhere(v_sePoints > 0)
         sps_upper = np.min(v_bot_Points)
         sps_bot = np.max(v_upper_Points)
+        v_space_ub_dict[i] = [sps_upper, sps_bot]
         decision_map[sps_upper:sps_bot, left:right] = 0
 
 
@@ -104,11 +95,15 @@ def get_decisionMap(img_gray):
 
 
     # upper, bot, left, right
-    x_bird = bird_loc[0, 0]
-    bird_bounding_box = np.array([x_bird, x_bird + 20, 55, 85])
-    decision_map[bird_bounding_box[0]:bird_bounding_box[1], bird_bounding_box[2]:bird_bounding_box[3]] = 1
+    if bird_loc.shape[0]:
+        x_bird = bird_loc[0, 0]
+        bird_x, bird_y = x_bird + 20, 70
+        bird_bounding_box = np.array([x_bird, x_bird + 20, 55, 85])
+        decision_map[bird_bounding_box[0]:bird_bounding_box[1], bird_bounding_box[2]:bird_bounding_box[3]] = 1
+    else:
+        raise(ValueError("No bird detected!"))
 
-    return decision_map
+    return decision_map, bird_x, bird_y, h_ob_lr_dict, v_space_ub_dict
 
 
 

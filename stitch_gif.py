@@ -4,9 +4,9 @@ import numpy as np
 import imageio
 
 
-imgs_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_5'
-decision_map_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_5_results'
-target_gif_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\gifs\res_cat_5.gif'
+imgs_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_6'
+decision_map_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\test_png_6_decision'
+target_gif_path = r'D:\anaconda\flappy_ai\FlapPyBird\datasets\gifs\res_cat_6.gif'
 
 img_list = sorted(os.listdir(imgs_path), key=lambda x:int(x.split('_')[1][:-4]))
 decision_map_list = sorted(os.listdir(decision_map_path), key=lambda x:int(x.split('_')[1][:-4]))

@@ -1,0 +1,7 @@
+Speed: 137 pixel / s
+
+
+cmd_dict: 
+    0 : keep height
+    1 : raise
+    2 : dive
